@@ -62,21 +62,30 @@ func Signup() gin.HandlerFunc {
 		if err != nil {
 			log.Panic(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error occurred while checking for the user email address"})
+			return
 		}
 
-		password := HashPassword(*user.Password)
-		user.Password = &password
+		if count > 0 {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "This email or phone number already exists"})
+			return
+		}
 
 		count, err = userCollection.CountDocuments(ctx, bson.M{"phone": user.Phone})
 		defer cancel()
 		if err != nil {
 			log.Panic(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error occurred while checking for the user phone number"})
+			return
 		}
 
 		if count > 0 {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "This email or phone number already exists"})
+			return
 		}
+
+		// store the hash of the password
+		password := HashPassword(*user.Password)
+		user.Password = &password
 
 		user.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		user.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
