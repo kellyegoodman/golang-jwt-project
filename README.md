@@ -1,5 +1,5 @@
 # golang-jwt-project
-Simple go server that performs user authentication using JWT, gin-gonic :cocktail:, and MongoDB :leaves:. Monolithic app :moyai: Serves as the backend for signup/login functionality.
+Simple go server that performs user authentication using JWT, gin-gonic :cocktail:, and MongoDB :leaves:. Monolithic app :moyai:. Serves as the backend for signup/login functionality.
 
 ## Prerequisites
 1. Go installed
